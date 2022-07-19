@@ -1,16 +1,19 @@
 import React,{useState} from 'react';
 import {useNavigate} from 'react-router-dom'
 import { useContext } from "react";
+import {StudentContext} from './../../App'
 import {UserContext} from './../../App'
 
 function AddMentor(props){
-	const context = useContext(UserContext);	
+	const context = useContext(StudentContext);	
+	const mentorContext = useContext(UserContext);	
   let [firstName,setFName] = useState("")
   let [lastName,setLName] = useState("")
   let [email,setEmail] = useState("")
   let [dob,setDOB] = useState("")
   let [mobile,setMobile] = useState("")
   let [location,setLocation] = useState("")
+  let [mentor,setMentor] = useState("")
   let navigate = useNavigate()
 
   let handleSubmit = ()=>{
@@ -20,13 +23,14 @@ function AddMentor(props){
       email,
       dob,
       mobile,
-      location
+      location,
+      mentor
     }
-    let user = [...context.user]
+    let user = [...context.student]
     user.push(data)
-    context.setUser(user)
-    navigate('/list-mentor')
-    localStorage.setItem('allMentors',JSON.stringify(user))
+    context.setStudent(user)
+    navigate('/list-student')
+    localStorage.setItem('allStudent',JSON.stringify(user))
     
   }
 	return (
@@ -59,10 +63,19 @@ function AddMentor(props){
 		        <label>Location</label>
 		        <input type="text" className="d-block form-control" placeholder="Enter Location" onChange={(e)=>setLocation(e.target.value)}/>
 		      </div>
+		      <div className="mb-3 col-md-4">
+		        <label>Select Mentor</label>
+		        <select className="d-block form-control" onChange={(e)=>setMentor(e.target.value)}>
+	            {
+	            	mentorContext.user.map((val,i) =>
+	            		<option key={i} value={val.firstName}>{val.firstName}</option>
+            		)
+	            }
+	          </select>
+		      </div>
 			</form>
-
 			<div className="p-4 row">
-      	<button className="btn btn-dark mr-2" onClick={()=>navigate(`/list-mentor`)}>Back</button>
+      	<button className="btn btn-dark mr-2" onClick={()=>navigate(`/list-student`)}>Back</button>
 	  		<button type="submit" className="btn btn-primary ml-3 p-2"  onClick={()=>handleSubmit()}>Submit</button>
   		</div>
 		</div>

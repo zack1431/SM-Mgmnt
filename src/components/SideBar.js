@@ -36,12 +36,8 @@ function SideBar(){
             
             <hr className="sidebar-divider" />
 
-            
-            <div className="sidebar-heading">
-                Interface
-            </div>
 
-            
+            {/*mentor*/}
             <li className="nav-item active">
                 <a className="nav-link collapsed" href="!#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
@@ -55,6 +51,25 @@ function SideBar(){
                         </Link>
                         <Link to="/list-mentor">
                             <a className="collapse-item" href="cards.html">Mentor List</a>
+                        </Link>
+                    </div>
+                </div>
+            </li>
+
+            {/*student*/}
+            <li className="nav-item active">
+                <a className="nav-link collapsed" href="!#" data-toggle="collapse" data-target="#collapse3"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i className="fas fa-user"></i>
+                    <span>Student</span>
+                </a>
+                <div id="collapse3" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div className="bg-white py-2 collapse-inner rounded">
+                        <Link to="/add-student">
+                            <a className="collapse-item" href="buttons.html">Add Student</a>
+                        </Link>
+                        <Link to="/list-student">
+                            <a className="collapse-item" href="cards.html">Student List</a>
                         </Link>
                     </div>
                 </div>

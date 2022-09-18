@@ -19,7 +19,7 @@ import axios from 'axios';
 
 export const UserContext = createContext()
 export const StudentContext = createContext();
-const BaseUrl = "http://localhost:4500";
+const BaseUrl = "https://stumentor.onrender.com";
 
 function App() {
   let [user,setUser] = useState([

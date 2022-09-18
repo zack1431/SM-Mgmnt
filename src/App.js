@@ -13,10 +13,13 @@ import ListMentor from './components/mentor/list_mentor';
 import AddStudent from './components/Students/add_student';
 import EditStudent from './components/Students/edit_student';
 import ListStudent from './components/Students/list_student';
-import {useState,createContext,useEffect} from 'react'
+import {useState,createContext,useEffect} from 'react';
+
+import axios from 'axios';
 
 export const UserContext = createContext()
 export const StudentContext = createContext();
+const BaseUrl = "http://localhost:4500";
 
 function App() {
   let [user,setUser] = useState([
@@ -77,25 +80,30 @@ function App() {
 ])
 
   useEffect(() => {
-    const items = JSON.parse(localStorage.getItem('allMentors'));
-    if (items) {
-     setUser(items);
-    }
-    const items2 = JSON.parse(localStorage.getItem('allStudent'));
-    if (items2) {
-     setStudent(items2);
-    }
+    getData();
+    // const items = JSON.parse(localStorage.getItem('allMentors'));
+    // if (items) {
+    //  setUser(items);
+    // }
     
-
   }, []);
+
+  let getData = async() =>{
+     let response = await axios.get(BaseUrl+'/mentor')
+     let studentResponse = await axios.get(BaseUrl+'/showAll')
+    let allchars = response.data;
+     setUser(allchars.users)
+     setStudent(studentResponse.data.data)
+    //  console.log(student)
+  } 
   return <>
     <div id="wrapper">
       <BrowserRouter>
         <SideBar />
         <div id="content">
           <NavBar />
-          <StudentContext.Provider value={{student,setStudent}}>  
-          <UserContext.Provider value={{user,setUser}}>
+          <StudentContext.Provider value={{student,setStudent,BaseUrl}}>  
+          <UserContext.Provider value={{user,setUser,BaseUrl}}>
           <Routes>
             <Route path="/" element={<DashBoard data={{user,setUser}}/>}/>
             <Route path="/adduser" element={<CreateUser data={{user,setUser}}/>}/>

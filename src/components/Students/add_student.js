@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import { useContext } from "react";
 import {StudentContext} from './../../App'
 import {UserContext} from './../../App'
+import axios from 'axios';
 
 function AddMentor(props){
 	const context = useContext(StudentContext);	
@@ -13,10 +14,10 @@ function AddMentor(props){
   let [dob,setDOB] = useState("")
   let [mobile,setMobile] = useState("")
   let [location,setLocation] = useState("")
-  let [mentor,setMentor] = useState("")
+  let [selectedMentor,setMentorValue] = useState("");
   let navigate = useNavigate()
 
-  let handleSubmit = ()=>{
+  let handleSubmit = async ()=>{
     let data = {
       firstName,
       lastName,
@@ -24,14 +25,19 @@ function AddMentor(props){
       dob,
       mobile,
       location,
-      mentor
+      mentor_id:selectedMentor
     }
     let user = [...context.student]
-    user.push(data)
+	let response = await axios.post(context.BaseUrl+'/create-student', data)
+    user.push(await response.data.users);
     context.setStudent(user)
     navigate('/list-student')
-    localStorage.setItem('allStudent',JSON.stringify(user))
     
+  }
+
+//   on select change
+let handleChange = (e) => {
+    setMentorValue(e.target.value);
   }
 	return (
 		<div className=" p-4">
@@ -65,10 +71,10 @@ function AddMentor(props){
 		      </div>
 		      <div className="mb-3 col-md-4">
 		        <label>Select Mentor</label>
-		        <select className="d-block form-control" onChange={(e)=>setMentor(e.target.value)}>
+		        <select className="d-block form-control" onChange={(e) => handleChange(e)}>
 	            {
 	            	mentorContext.user.map((val,i) =>
-	            		<option key={i} value={val.firstName}>{val.firstName}</option>
+	            		<option key={i} value={val.mn_id}>{val.firstName}</option>
             		)
 	            }
 	          </select>

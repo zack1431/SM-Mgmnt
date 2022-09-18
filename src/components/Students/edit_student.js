@@ -3,21 +3,32 @@ import {useNavigate} from 'react-router-dom'
 import React,{useState,useContext} from 'react'
 import {useParams} from 'react-router-dom'
 import {UserContext} from './../../App'
+import axios from 'axios';
 
 function EditMentor(props){
 	let params = useParams();
 	const mentorContext = useContext(UserContext);	
-  let [firstName,setFName] = useState(props.data.student[params.id].firstName)
-  let [lastName,setLName] = useState(props.data.student[params.id].lastName)
-  let [email,setEmail] = useState(props.data.student[params.id].email)
-  let [dob,setDOB] = useState(props.data.student[params.id].dob)
-  let [mobile,setMobile] = useState(props.data.student[params.id].mobile)
-  let [location,setLocation] = useState(props.data.student[params.id].location)
-  let [mentor,setMentor] = useState(props.data.student[params.id].mentor)
-
+	let editData = {};
+	props.data.student.forEach(val=>{
+		if(params.id === val._id){
+			editData = val;
+		}
+	})
+  let [firstName,setFName] = useState(editData.firstName)
+  let [lastName,setLName] = useState(editData.lastName)
+  let [email,setEmail] = useState(editData.email)
+  let [dob,setDOB] = useState(editData.dob)
+  let [mobile,setMobile] = useState(editData.mobile)
+  let [location,setLocation] = useState(editData.location)
+  let [mentor,setMentor] = useState(editData.studentDetails.firstName)
+  let [mentor_id,setMentorId] = useState(null);
+  let [mentorDetails,setDetails] = useState({});
   let navigate = useNavigate()
 
+
+
   let handleSubmit = ()=>{
+	let id = params.id
     let data = {
       firstName,
       lastName,
@@ -25,18 +36,33 @@ function EditMentor(props){
       dob,
       mobile,
       location,
-      mentor
+      mentor_id,
+	  id,
+	  _id:id,
+	  studentDetails:mentorDetails
     }
     let user = [...props.data.student]
-
-    user.splice(params.id,1,data)
-
-    props.data.setStudent(user)
+	let postUrl = mentorContext.BaseUrl+"/student/"+params.id;
+    props.data.student.forEach((val,key)=>{
+		if(params.id === val._id){
+				user.splice(key,1,data)
+			}
+		})
+    
+    axios.put(postUrl, data)
+    .then(response => props.data.setStudent(user));
     navigate('/list-student')
-    localStorage.setItem('allStudent',JSON.stringify(user))
     
   }
-
+  let onSelect = (e) =>{
+	mentorContext.user.forEach(val =>{
+		if(e.target.value === val._id){
+			setDetails(val);
+			setMentor(val.firstName);
+			setMentorId(val._id)
+		}
+	})
+  }
 	return (
 		<div className=" p-4">
 			<form className="p-2 row">
@@ -68,11 +94,15 @@ function EditMentor(props){
 		        <input type="text" className="d-block form-control" placeholder="Enter Location" value={location} onChange={(e)=>setLocation(e.target.value)}/>
 		      </div>
 		      <div className="mb-3 col-md-4">
+		        <label>Assigned Mentor</label>
+		        <input readOnly type="text" className="d-block form-control" placeholder="Enter Location" value={mentor}/>
+		      </div>
+		      <div className="mb-3 col-md-4">
 		        <label>Select Mentor</label>
-		        <select className="d-block form-control" value={mentor} onChange={(e)=>setMentor(e.target.value)}>
+		        <select className="d-block form-control" onChange={(e)=>onSelect(e)}>
 	            {
 	            	mentorContext.user.map((val,i) =>
-	            		<option key={i} value={val.firstName}>{val.firstName}</option>
+	            		<option key={i} value={val.mn_id}>{val.firstName}</option>
             		)
 	            }
 	          </select>

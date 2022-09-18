@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import {useNavigate} from 'react-router-dom'
 import { useContext } from "react";
 import {UserContext} from './../../App'
+import axios from 'axios';
 
 function AddMentor(props){
 	const context = useContext(UserContext);	
@@ -10,23 +11,21 @@ function AddMentor(props){
   let [email,setEmail] = useState("")
   let [dob,setDOB] = useState("")
   let [mobile,setMobile] = useState("")
-  let [location,setLocation] = useState("")
   let navigate = useNavigate()
 
-  let handleSubmit = ()=>{
+  let handleSubmit = async ()=>{
     let data = {
       firstName,
       lastName,
       email,
       dob,
-      mobile,
-      location
+      mobile
     }
     let user = [...context.user]
-    user.push(data)
-    context.setUser(user)
+    let response = await axios.post(context.BaseUrl+'/create-mentor', data)
+	user.push(response.data.data[0]);
+  	context.setUser(user);
     navigate('/list-mentor')
-    localStorage.setItem('allMentors',JSON.stringify(user))
     
   }
 	return (
@@ -53,11 +52,6 @@ function AddMentor(props){
 		      <div className="mb-3 col-md-4">
 		        <label>DOB</label>
 		        <input type="date" className="d-block form-control" placeholder="dd-mm-yy" onChange={(e)=>setDOB(e.target.value)}/>
-		      </div>
-
-		      <div className="mb-3 col-md-4">
-		        <label>Location</label>
-		        <input type="text" className="d-block form-control" placeholder="Enter Location" onChange={(e)=>setLocation(e.target.value)}/>
 		      </div>
 			</form>
 

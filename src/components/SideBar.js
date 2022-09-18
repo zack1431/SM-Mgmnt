@@ -18,10 +18,9 @@ function SideBar(){
 
            
             <li className="nav-item active">
-                <Link to="/">
-                    <a className="nav-link" href="index.html">
+                <Link to="/" className="nav-link">
                     <i className="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
                 </Link>
             </li>
 
@@ -46,11 +45,11 @@ function SideBar(){
                 </a>
                 <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
-                        <Link to="/add-mentor">
-                            <a className="collapse-item" href="buttons.html">Add Mentor</a>
+                        <Link to="/add-mentor" className="collapse-item">
+                            Add Mentor
                         </Link>
-                        <Link to="/list-mentor">
-                            <a className="collapse-item" href="cards.html">Mentor List</a>
+                        <Link to="/list-mentor" className="collapse-item">
+                            Mentor List
                         </Link>
                     </div>
                 </div>
@@ -65,11 +64,11 @@ function SideBar(){
                 </a>
                 <div id="collapse3" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
-                        <Link to="/add-student">
-                            <a className="collapse-item" href="buttons.html">Add Student</a>
+                        <Link to="/add-student" className="collapse-item">
+                            Add Student
                         </Link>
-                        <Link to="/list-student">
-                            <a className="collapse-item" href="cards.html">Student List</a>
+                        <Link to="/list-student" className="collapse-item">
+                            Student List
                         </Link>
                     </div>
                 </div>

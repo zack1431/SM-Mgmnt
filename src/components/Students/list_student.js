@@ -1,6 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import { useContext } from "react";
-import {StudentContext} from './../../App'
+import {StudentContext} from './../../App';
+import axios from 'axios';
 
 function ListMentor(props){
 	let navigate = useNavigate();
@@ -9,11 +10,12 @@ function ListMentor(props){
 
 	
 
-    let handleDelete = (i)=>{
+    let handleDelete = (i,id)=>{
         let data = [...context.student]
         data.splice(i,1)
         context.setStudent(data)
-        localStorage.setItem('allStudent',JSON.stringify(data))
+        let deleteUrl = context.BaseUrl+"/student/"+id
+        axios.delete(deleteUrl)
     }
 
     
@@ -44,10 +46,10 @@ function ListMentor(props){
                               <td>{val.mobile}</td>
                               <td>{val.dob}</td>
                               <td>{val.location}</td>
-                              <td>{val.mentor}</td>
+                              <td>{val.studentDetails.firstName} {val.studentDetails.lastName}</td>
                               <td>
-                                  <button className="btn btn-info mr-2" onClick={()=>navigate(`/edit-student/${i}`)}>Edit</button>
-                                  <button className="btn btn-danger" onClick={()=>handleDelete(i)}>Delete</button>
+                                  <button className="btn btn-info mr-2" onClick={()=>navigate(`/edit-student/${val._id}`)}>Edit</button>
+                                  <button className="btn btn-danger" onClick={()=>handleDelete(i,val._id)}>Delete</button>
                               </td>
                             </tr>
                       )

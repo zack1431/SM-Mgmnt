@@ -13,6 +13,7 @@ import ListMentor from './components/mentor/list_mentor';
 import AddStudent from './components/Students/add_student';
 import EditStudent from './components/Students/edit_student';
 import ListStudent from './components/Students/list_student';
+import AssignMulti from './components/Students/assign';
 import {useState,createContext,useEffect} from 'react';
 
 import axios from 'axios';
@@ -115,6 +116,7 @@ function App() {
             <Route path="/add-student" element={<AddStudent />}/>
             <Route path='/edit-student/:id' element = {<EditStudent data={{student,setStudent}}/>}/>
             <Route path="/list-student" element={<ListStudent/>}/>
+            <Route path="/assign" element={<AssignMulti/>}/>
             </Routes>
           </UserContext.Provider>
           </StudentContext.Provider> 

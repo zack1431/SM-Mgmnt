@@ -70,6 +70,9 @@ function SideBar(){
                         <Link to="/list-student" className="collapse-item">
                             Student List
                         </Link>
+                        <Link to="/assign" className="collapse-item">
+                            Assign Multi Student
+                        </Link>
                     </div>
                 </div>
             </li>

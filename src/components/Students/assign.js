@@ -13,9 +13,11 @@ function AssignMulti(props){
     let [nonAssignedId,setnonAssignedID] = useState([])
     let navigate = useNavigate()
   useEffect(() => {
-    getStudentData();
+    getStudentData().then(val =>{
+        
+    })
     
-  }, []);
+  });
     let getStudentData = async () =>{
         let response = await axios.get(context.BaseUrl+'/nonAssignedStd')
         setnonAssigned(response.data.users)
@@ -28,10 +30,10 @@ function AssignMulti(props){
         let reqObj = {
             temp : JSON.stringify(nonAssignedId),
         }
-        let response = await axios.post(context.BaseUrl+'/assignMulti'/selectedMentor,reqObj)
-        response.then((val)=>{
-            console.log(val);
-        })
+        let url = context.BaseUrl+'/assignMulti/'+selectedMentor;
+        let response = await axios.post(url,reqObj)
+        let studentResponse = await axios.get(context.BaseUrl+'/showAll')
+        context.setStudent(studentResponse.data.data)
         navigate('/list-student')
     }
     else{

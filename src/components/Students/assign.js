@@ -24,7 +24,6 @@ function AssignMulti(props){
     }
     var data = []
   let handleSubmit = async ()=>{
-    console.log(selectedMentor);
     if(nonAssignedId.length > 0 && selectedMentor !== ''){
         
         let reqObj = {
@@ -32,6 +31,7 @@ function AssignMulti(props){
         }
         let url = context.BaseUrl+'/assignMulti/'+selectedMentor;
         let response = await axios.post(url,reqObj)
+        console.log(response)
         let studentResponse = await axios.get(context.BaseUrl+'/showAll')
         context.setStudent(studentResponse.data.data)
         navigate('/list-student')

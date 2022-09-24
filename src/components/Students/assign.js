@@ -1,28 +1,21 @@
+import './student.css'
 import React,{useState} from 'react';
 import {useNavigate} from 'react-router-dom'
-import { useContext,useEffect } from "react";
+import { useContext } from "react";
 import {StudentContext} from './../../App'
 import {UserContext} from './../../App'
 import axios from 'axios';
+// import Dropdown from './dropdown'
 
-function AssignMulti(props){
+
+function AssignMulti(){
 	const context = useContext(StudentContext);	
     const mentorContext = useContext(UserContext);	
     let [selectedMentor,setMentorValue] = useState("");
-    let [nonAssigned,setnonAssigned] = useState([])
-    let [nonAssignedId,setnonAssignedID] = useState([])
+    let [nonAssignedId,setnonAssignedID] = useState([]);
+    let [dropdown,setDropdown] = useState(false)
     let navigate = useNavigate()
-  useEffect(() => {
-    getStudentData().then(val =>{
-        
-    })
-    
-  });
-    let getStudentData = async () =>{
-        let response = await axios.get(context.BaseUrl+'/nonAssignedStd')
-        setnonAssigned(response.data.users)
-    }
-    var data = []
+ 
   let handleSubmit = async ()=>{
     if(nonAssignedId.length > 0 && selectedMentor !== ''){
         
@@ -34,6 +27,8 @@ function AssignMulti(props){
         console.log(response)
         let studentResponse = await axios.get(context.BaseUrl+'/showAll')
         context.setStudent(studentResponse.data.data)
+        let response2 = await axios.get(context.BaseUrl+'/nonAssignedStd')
+        context.setnonAssigned(response2.data.users)
         navigate('/list-student')
     }
     else{
@@ -50,7 +45,10 @@ function AssignMulti(props){
 let handleChange = (e) => {
     setMentorValue(e.target.value);
   }
-
+  let toggleDropDown = ()=>{
+    setDropdown(prev => !prev);
+  }
+  var data = [];
   let handleCheck = (e,val) => {
     if(e.target.checked){
         data.push(val._id);
@@ -64,9 +62,9 @@ let handleChange = (e) => {
             data.splice(0,1);
         }
     }
-    
     setnonAssignedID(data);
   }
+  
 	return (
 		<div className=" p-4">
 			<form className="p-2 row">
@@ -80,15 +78,26 @@ let handleChange = (e) => {
 	            }
 	          </select>
 		      </div>
-              {
-                nonAssigned.map((val,i) =>
-                    <div className="mb-3 col-md-4" key={i}>
-                        <input type="checkbox" onChange={(e)=>handleCheck(e,val)}/>
-                        <label  className="form-label">{val.firstName} {val.lastName}</label>
-                    </div>
-                )
-              }
-			  
+          <div className='col-md-4'>
+          <div className='formField' onClick={()=>toggleDropDown()}>
+            <label>Select Multiple Students</label>
+            
+            
+        </div>
+        
+        <div className='RevRequestedTooltip' hidden={!dropdown}>
+                <div className='tooltip-body'>
+                    {
+                      context.nonAssigned.map((val,i) =>
+                        <div key={i}>
+                          <input type="checkbox" onChange={(e)=>handleCheck(e,val)}/>
+                          <label  className="form-label">{val.firstName} {val.lastName}</label>
+                        </div>
+                      )
+                    }
+                </div>
+            </div>
+          </div>
 			</form>
 			<div className="p-4 row">
       	<button className="btn btn-dark mr-2" onClick={()=>navigate(`/list-student`)}>Back</button>

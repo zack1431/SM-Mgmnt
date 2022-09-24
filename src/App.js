@@ -23,6 +23,7 @@ export const StudentContext = createContext();
 const BaseUrl = "https://stumentor.onrender.com";
 
 function App() {
+  let [nonAssigned,setnonAssigned] = useState([])
   let [user,setUser] = useState([
   {
       firstName:"Zakir",
@@ -92,9 +93,12 @@ function App() {
   let getData = async() =>{
      let response = await axios.get(BaseUrl+'/mentor')
      let studentResponse = await axios.get(BaseUrl+'/showAll')
+     let response2 = await axios.get(BaseUrl+'/nonAssignedStd')
     let allchars = response.data;
      setUser(allchars.users)
      setStudent(studentResponse.data.data)
+     setnonAssigned(response2.data.users)
+
     //  console.log(student)
   } 
   return <>
@@ -103,7 +107,7 @@ function App() {
         <SideBar />
         <div id="content">
           <NavBar />
-          <StudentContext.Provider value={{student,setStudent,BaseUrl}}>  
+          <StudentContext.Provider value={{student,setStudent,BaseUrl,nonAssigned,setnonAssigned}}>  
           <UserContext.Provider value={{user,setUser,BaseUrl}}>
           <Routes>
             <Route path="/" element={<DashBoard data={{user,setUser}}/>}/>
@@ -116,7 +120,7 @@ function App() {
             <Route path="/add-student" element={<AddStudent />}/>
             <Route path='/edit-student/:id' element = {<EditStudent data={{student,setStudent}}/>}/>
             <Route path="/list-student" element={<ListStudent/>}/>
-            <Route path="/assign" element={<AssignMulti/>}/>
+            <Route path="/assign" element={<AssignMulti />}/>
             </Routes>
           </UserContext.Provider>
           </StudentContext.Provider> 
